@@ -1,6 +1,10 @@
-import { ChangeEvent, FormEvent, useState } from 'react'
-import validator from 'validator'
-import { Redirect } from 'react-router-dom'
+import { Alert } from '@material-ui/lab'
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
+import styled from 'styled-components'
+import { Link as RouterLink } from 'react-router-dom'
+import useLogin from './Login.useLogin'
+import { STATUS_ALERT_MESSAGES } from './Login.constants'
+
 import {
   TextField,
   Button,
@@ -10,39 +14,6 @@ import {
   Typography,
   Avatar,
 } from '@material-ui/core'
-import { Alert } from '@material-ui/lab'
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
-import styled from 'styled-components'
-import { Link as RouterLink } from 'react-router-dom'
-import { status } from '../data/index'
-
-interface Message {
-  severity: 'warning' | 'success' | 'info' | 'error'
-  message: string
-}
-
-const STATUS_ALERT_MESSAGES: Record<Exclude<status, 'resting'>, Message> = {
-  'invalid-email': {
-    severity: 'warning',
-    message: 'Your email is invalid',
-  },
-  'not-authenticated': {
-    severity: 'error',
-    message: 'Invalid Login details',
-  },
-  'short-password': {
-    severity: 'warning',
-    message: 'Password must be more than 7 characters',
-  },
-  authenticating: {
-    severity: 'info',
-    message: 'Checking login Details...',
-  },
-  redirecting: {
-    severity: 'success',
-    message: 'Redirecting...',
-  },
-}
 
 const ItemWrapper = styled.div`
   padding: 0.5rem;
@@ -63,54 +34,22 @@ const CenteredDiv = styled.div`
   flex-direction: column;
   align-items: center;
 `
-const createMockCall = () =>
-  new Promise((resolve) => {
-    setTimeout(() => resolve(true), 2000)
-  })
 
 const Login = () => {
-  const [email, setEmail] = useState<string>('')
-  const [password, setPassword] = useState<string>('')
-  const [statusMessage, setStatusMessage] = useState<status>('resting')
-
-  const handleEmail = ({ target }: ChangeEvent<HTMLInputElement>) => {
-    setEmail(target.value)
-  }
-
-  const handlePassword = ({ target }: ChangeEvent<HTMLInputElement>) => {
-    setPassword(target.value)
-  }
-
-  const handleSubmit = (event: FormEvent) => {
-    event.preventDefault()
-    if (!validator.isEmail(email)) {
-      setStatusMessage('invalid-email')
-      return
-    }
-    if (password.length < 8) {
-      setStatusMessage('short-password')
-      return
-    }
-
-    setStatusMessage('authenticating')
-
-    const response = createMockCall()
-
-    if (!response) {
-      setStatusMessage('not-authenticated')
-      return
-    }
-
-    setStatusMessage('redirecting')
-
-    //Redirect to='/recipes'
-  }
+  const {
+    authenticate,
+    email,
+    password,
+    statusMessage,
+    updateEmail,
+    updatePassword,
+  } = useLogin()
 
   const alertMessage =
-    status === 'resting' ? null : (
+    statusMessage === 'resting' ? null : (
       <ItemWrapper>
-        <Alert severity={STATUS_ALERT_MESSAGES[status].severity}>
-          {STATUS_ALERT_MESSAGES[status].message}
+        <Alert severity={STATUS_ALERT_MESSAGES[statusMessage].severity}>
+          {STATUS_ALERT_MESSAGES[statusMessage].message}
         </Alert>
       </ItemWrapper>
     )
@@ -129,7 +68,7 @@ const Login = () => {
           </Typography>
         </CenteredDiv>
 
-        <form noValidate onSubmit={handleSubmit}>
+        <form noValidate onSubmit={authenticate}>
           <ItemWrapper>
             <TextField
               variant='outlined'
@@ -142,7 +81,7 @@ const Login = () => {
               autoComplete='email'
               autoFocus
               value={email}
-              onChange={handleEmail}
+              onChange={updateEmail}
             />
           </ItemWrapper>
           <ItemWrapper>
@@ -157,7 +96,7 @@ const Login = () => {
               id='password'
               autoComplete='current-password'
               value={password}
-              onChange={handlePassword}
+              onChange={updatePassword}
             />
           </ItemWrapper>
 

@@ -1,4 +1,7 @@
-import {} from '../data/index'
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
+import styled from 'styled-components'
+import { Link as RouterLink } from 'react-router-dom'
+import { Alert } from '@material-ui/lab'
 
 import {
   TextField,
@@ -9,12 +12,15 @@ import {
   Typography,
   Avatar,
 } from '@material-ui/core'
-import { Alert } from '@material-ui/lab'
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
-import styled from 'styled-components'
-import { Link as RouterLink } from 'react-router-dom'
+
+import { STATUS_ALERT_MESSAGES } from './Register.constants'
+import useRegister from './Register.useRegister'
 
 const InputWrapper = styled.div`
+  padding: 0.5rem;
+`
+
+const ItemWrapper = styled.div`
   padding: 0.5rem;
 `
 
@@ -35,6 +41,30 @@ const CenteredDiv = styled.div`
 `
 
 const Login = () => {
+  const {
+    firstName,
+    lastName,
+    email,
+    password,
+    confirmPassword,
+    message,
+    updateFirstName,
+    updateLastName,
+    updateEmail,
+    updatePassword,
+    updateConfirmPassword,
+    createAccount,
+  } = useRegister()
+
+  const alertMessage =
+    message === 'resting' ? null : (
+      <ItemWrapper>
+        <Alert severity={STATUS_ALERT_MESSAGES[message].severity}>
+          {STATUS_ALERT_MESSAGES[message].message}
+        </Alert>
+      </ItemWrapper>
+    )
+
   return (
     <>
       <CssBaseline />
@@ -49,7 +79,7 @@ const Login = () => {
           </Typography>
         </CenteredDiv>
 
-        <form noValidate autoComplete='off'>
+        <form noValidate autoComplete='off' onSubmit={createAccount}>
           <Grid container>
             <Grid item xs={12} sm={6}>
               <InputWrapper>
@@ -63,6 +93,8 @@ const Login = () => {
                   name='firstname'
                   autoComplete='fname'
                   autoFocus
+                  value={firstName}
+                  onChange={updateFirstName}
                 />
               </InputWrapper>
             </Grid>
@@ -77,6 +109,8 @@ const Login = () => {
                   label='Last Name'
                   name='lastname'
                   autoComplete='lname'
+                  value={lastName}
+                  onChange={updateLastName}
                 />
               </InputWrapper>
             </Grid>
@@ -91,6 +125,8 @@ const Login = () => {
                   label='Email Address'
                   name='email'
                   autoComplete='email'
+                  value={email}
+                  onChange={updateEmail}
                 />
               </InputWrapper>
             </Grid>
@@ -106,6 +142,8 @@ const Login = () => {
                   type='password'
                   id='password'
                   autoComplete='current-password'
+                  value={password}
+                  onChange={updatePassword}
                 />
               </InputWrapper>
             </Grid>
@@ -121,11 +159,15 @@ const Login = () => {
                   type='password'
                   id='confirmpassword'
                   autoComplete='current-password'
+                  value={confirmPassword}
+                  onChange={updateConfirmPassword}
                 />
               </InputWrapper>
             </Grid>
           </Grid>
           <InputWrapper>
+            {alertMessage}
+
             <Button type='submit' fullWidth variant='contained' color='primary'>
               Register
             </Button>

@@ -1,5 +1,5 @@
 import { Switch, Route } from 'react-router-dom'
-import Login from './Login'
+import Login from './login'
 import RecipesList from './RecipesList'
 import Register from './Register'
 
