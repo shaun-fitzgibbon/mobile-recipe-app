@@ -41,7 +41,7 @@ export const STATUS_ALERT_MESSAGES: Record<
     message: 'Authenticating...',
   },
   success: {
-    severity: 'warning',
+    severity: 'success',
     message: 'Success...',
   },
   failure: {
@@ -53,18 +53,3 @@ export const STATUS_ALERT_MESSAGES: Record<
     message: 'Technical error',
   },
 }
-
-export const ADD_USER_QUERY = `
-    mutation ($id: ID!, $firstName: String!, $lastName: String!, $email: String!) {
-        createUser(
-        data: { 
-            id: $id 
-            firstName: $firstName 
-            lastName: $lastName 
-            email: $email 
-        }
-        ) {
-            _id
-        }
-    } 
-`

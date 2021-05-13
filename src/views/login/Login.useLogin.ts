@@ -5,12 +5,13 @@ import GoTrue from 'gotrue-js'
 import * as types from './Login.types'
 
 const auth = new GoTrue({
-  APIUrl: 'https://shauns-recipe-app.netlify.app/.netlify/identity',
+  APIUrl: process.env.REACT_APP_AUTH_URL,
 })
 
 export const useLogin = () => {
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
+  const [showPassword, setShowPassword] = useState<boolean>(false)
   const [statusMessage, setStatusMessage] = useState<types.status>('resting')
 
   const updateEmail = ({ target }: ChangeEvent<HTMLInputElement>) => {
@@ -19,6 +20,10 @@ export const useLogin = () => {
 
   const updatePassword = ({ target }: ChangeEvent<HTMLInputElement>) => {
     setPassword(target.value)
+  }
+
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword)
   }
 
   const authenticate = async (event: FormEvent) => {
@@ -52,9 +57,11 @@ export const useLogin = () => {
   return {
     email,
     password,
+    showPassword,
     statusMessage,
     updateEmail,
     updatePassword,
+    toggleShowPassword,
     authenticate,
   }
 }

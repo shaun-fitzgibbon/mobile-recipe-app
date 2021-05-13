@@ -6,7 +6,7 @@ export const STATUS_ALERT_MESSAGES: Record<
 > = {
   'invalid-email': {
     severity: 'warning',
-    message: 'Your email is invalid',
+    message: 'Invalid Login details',
   },
   'not-authenticated': {
     severity: 'error',
@@ -14,7 +14,7 @@ export const STATUS_ALERT_MESSAGES: Record<
   },
   'short-password': {
     severity: 'warning',
-    message: 'Password must be more than 7 characters',
+    message: 'Invalid Login details',
   },
   authenticating: {
     severity: 'info',

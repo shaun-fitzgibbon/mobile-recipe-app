@@ -1,21 +1,34 @@
 import { Switch, Route } from 'react-router-dom'
-import Login from './login'
+import { CssBaseline } from '@material-ui/core'
+
+import BottomNav from '../components/BottomNav/BottomNav'
+import Login from './Login'
+import Profile from './Profile'
 import RecipesList from './RecipesList'
 import Register from './Register'
 
 function App() {
   return (
-    <Switch>
-      <Route path='/login'>
-        <Login />
-      </Route>
-      <Route path='/register'>
-        <Register />
-      </Route>
-      <Route path='/'>
-        <RecipesList />
-      </Route>
-    </Switch>
+    <>
+      <CssBaseline />
+
+      <Switch>
+        <Route path='/login'>
+          <Login />
+        </Route>
+        <Route path='/register'>
+          <Register />
+        </Route>
+        <Route path='/profile'>
+          <Profile />
+          <BottomNav />
+        </Route>
+        <Route path='/'>
+          <RecipesList />
+          <BottomNav />
+        </Route>
+      </Switch>
+    </>
   )
 }
 

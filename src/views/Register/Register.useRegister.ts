@@ -12,7 +12,7 @@ const createHandler = (updateFn: (newValue: any) => void) => {
 }
 
 const auth = new GoTrue({
-  APIUrl: 'https://shauns-recipe-app.netlify.app/.netlify/identity',
+  APIUrl: process.env.REACT_APP_AUTH_URL,
 })
 
 export const useRegister = () => {
@@ -21,6 +21,8 @@ export const useRegister = () => {
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
   const [confirmPassword, setConfirmPassword] = useState<string>('')
+  const [showPassword, setShowPassword] = useState<boolean>(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false)
   const [message, setMessage] = useState<types.status>('resting')
 
   const updateFirstName = createHandler(setFirstName)
@@ -28,6 +30,13 @@ export const useRegister = () => {
   const updateEmail = createHandler(setEmail)
   const updatePassword = createHandler(setPassword)
   const updateConfirmPassword = createHandler(setConfirmPassword)
+
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword)
+  }
+  const toggleShowConfirmPassword = () => {
+    setShowConfirmPassword(!showConfirmPassword)
+  }
 
   const createAccount = async (event: FormEvent) => {
     event.preventDefault()
@@ -54,28 +63,12 @@ export const useRegister = () => {
 
     if (!user) return setMessage('technical-error')
 
-    await axios
-      .post(
-        'https://graphql.fauna.com/graphql',
-        {
-          query: ADD_USER_QUERY,
-          variables: {
-            id: user.id,
-            firstName,
-            lastName,
-            email,
-          },
-        },
-        {
-          headers: {
-            Authorization: 'Bearer fnAEIUTB8jACB5a3WbW-ZUyYlp8Vu_WTI95PcJBz',
-          },
-        }
-      )
-      .catch(console.error)
+    await axios.post('/api/addUser', { firstName, lastName }, headers:{
+      Authorization: `${user.token.access_token}`
+    })
+    
 
     setMessage('success')
-
     window.sessionStorage.setItem('user', JSON.stringify(user))
   }
 
@@ -85,12 +78,16 @@ export const useRegister = () => {
     email,
     password,
     confirmPassword,
+    showPassword,
+    showConfirmPassword,
     message,
     updateFirstName,
     updateLastName,
     updateEmail,
     updatePassword,
     updateConfirmPassword,
+    toggleShowPassword,
+    toggleShowConfirmPassword,
     createAccount,
   }
 }
