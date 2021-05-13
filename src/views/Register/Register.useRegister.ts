@@ -3,7 +3,6 @@ import validator from 'validator'
 import GoTrue from 'gotrue-js'
 import * as types from './Register.types'
 import axios from 'axios'
-import { ADD_USER_QUERY } from './Register.constants'
 
 const createHandler = (updateFn: (newValue: any) => void) => {
   return ({ target }: types.InputChangeEvent) => {
@@ -63,10 +62,15 @@ export const useRegister = () => {
 
     if (!user) return setMessage('technical-error')
 
-    await axios.post('/api/addUser', { firstName, lastName }, headers:{
-      Authorization: `${user.token.access_token}`
-    })
-    
+    await axios.post(
+      '/api/addUser',
+      { firstName, lastName },
+      {
+        headers: {
+          Authorization: `${user.token.access_token}`,
+        },
+      }
+    )
 
     setMessage('success')
     window.sessionStorage.setItem('user', JSON.stringify(user))
