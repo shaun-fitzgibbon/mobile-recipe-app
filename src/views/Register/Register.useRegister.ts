@@ -67,7 +67,7 @@ export const useRegister = () => {
       { firstName, lastName },
       {
         headers: {
-          Authorization: `${user.token.access_token}`,
+          Authorization: `Bearer ${user.token.access_token}`,
         },
       }
     )

@@ -22,14 +22,6 @@ import {
 import { STATUS_ALERT_MESSAGES } from './Register.constants'
 import useRegister from './Register.useRegister'
 
-const InputWrapper = styled.div`
-  padding: 0.5rem;
-`
-
-const ItemWrapper = styled.div`
-  padding: 0.5rem;
-`
-
 const PageWrapper = styled.div`
   min-height: 100vh;
   min-width: 100vw;
@@ -38,6 +30,9 @@ const PageWrapper = styled.div`
   align-items: center;
   justify-content: center;
   flex-direction: column;
+`
+const InputWrapper = styled.div`
+  padding: 0.5rem;
 `
 
 const CenteredDiv = styled.div`
@@ -73,11 +68,11 @@ const Login = () => {
 
   const alertMessage =
     message === 'resting' ? null : (
-      <ItemWrapper>
+      <InputWrapper>
         <Alert severity={STATUS_ALERT_MESSAGES[message].severity}>
           {STATUS_ALERT_MESSAGES[message].message}
         </Alert>
-      </ItemWrapper>
+      </InputWrapper>
     )
 
   return (
@@ -97,7 +92,7 @@ const Login = () => {
             <InputWrapper>
               <TextField
                 variant='outlined'
-                margin='normal'
+                margin='none'
                 required
                 fullWidth
                 id='firstname'
@@ -115,7 +110,7 @@ const Login = () => {
             <InputWrapper>
               <TextField
                 variant='outlined'
-                margin='normal'
+                margin='none'
                 required
                 fullWidth
                 id='lastname'
@@ -132,7 +127,7 @@ const Login = () => {
             <InputWrapper>
               <TextField
                 variant='outlined'
-                margin='normal'
+                margin='none'
                 required
                 fullWidth
                 id='email'
@@ -149,7 +144,7 @@ const Login = () => {
             <InputWrapper>
               <FormControl
                 variant='outlined'
-                margin='normal'
+                margin='none'
                 // autoComplete='current-password'
                 required
                 fullWidth
@@ -180,7 +175,7 @@ const Login = () => {
 
           <Grid item xs={12}>
             <InputWrapper>
-              <FormControl variant='outlined' fullWidth>
+              <FormControl variant='outlined' margin='none' fullWidth>
                 <InputLabel htmlFor='confirmpassword'>
                   Confirm Password *
                 </InputLabel>

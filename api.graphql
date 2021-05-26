@@ -6,5 +6,6 @@ type User {
 }
 
 type Query {
-  allUsers: [User! d]
+  allUsers: [User!]
+  getUser(id: ID!): User
 }
